@@ -1,31 +1,35 @@
-import React from 'react';
-import { Route, NavLink, Switch } from 'react-router-dom';
-import HomeView from './views/HomeView';
-import MoviesDetailsView from './views/MoviesDetailsView';
-import CastView from './views/CastView';
-import Reviews from './views/Reviews';
+import React, { Suspense, lazy } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import NotFoundView from './views/NotFoundView';
-import MoviesPage from './components/MoviesPage/MoviesPage';
-import routes from './routes';
+import MoviesPage from './components/Searchbar/Searchbar';
+import Nav from './views/Nav/Nav';
+
+const HomePage = lazy(() =>
+  import('./views/HomePage/HomePage' /* webpackChunkName: "home-page" */)
+);
+// const MoviesPage = lazy(() =>
+//   import('./moviesPage/MoviesPage' /* webpackChunkName: "movies-page" */)
+// );
+const MovieDetailsPage = lazy(() =>
+  import(
+    './views/MovieDetailsPage/MovieDetailsPage' /* webpackChunkName: "movie-details-page" */
+  )
+);
+// const NotFoundView = lazy(() =>
+//   import('./views/NotFoundView' /* webpackChunkName: "not-found-view */)
+// );
 
 const App = () => (
   <>
-    <ul>
-      <li>
-        <NavLink to={routes.HOME}>Home</NavLink>
-      </li>
-      <li>
-        <NavLink to={routes.MOVIES}> Movies </NavLink>
-      </li>
-    </ul>
-    <Switch>
-      <Route exact path="/" component={HomeView} />
-      <Route exact path="/movies" component={MoviesPage} />
-      <Route exact path="/movies/:movieId" component={MoviesDetailsView} />
-      <Route path="/movies/:movieId/cast" component={CastView} />
-      <Route path="/movies/:movieId/reviews" component={Reviews} />
-      <Route component={NotFoundView} />
-    </Switch>
+    <Suspense fallback={<p>Loading...</p>}>
+      <Nav />
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route exact path="/movies" component={MoviesPage} />
+        <Route path="/movies/:movieId" component={MovieDetailsPage} />
+        <Route component={NotFoundView} />
+      </Switch>
+    </Suspense>
   </>
 );
 

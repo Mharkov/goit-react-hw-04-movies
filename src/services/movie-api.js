@@ -14,4 +14,17 @@ export const getTrending = async () => {
   return data;
 };
 
-export const posterImgPath = `https://image.tmdb.org/t/p/w300/`;
+export const getMovieDetales = async (movie_id) => {
+  const { data } = await axios.get(`/movie/${movie_id}`);
+  return data;
+};
+
+export const getMoviesCast = async (movie_id) => {
+  const { data } = await axios.get(`/movie/${movie_id}/credits`);
+  return data;
+};
+
+export const getMoviesReviews = async (movie_id) => {
+  const { data } = await axios.get(`/movie/${movie_id}/reviews`);
+  return data;
+};

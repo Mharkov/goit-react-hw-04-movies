@@ -14,7 +14,7 @@ const MoviesList = ({ movies }) => {
             <MoviesPreview
               key={id}
               title={title}
-              imgUrl={API.posterImgPath + poster_path}
+              imgUrl={`https://image.tmdb.org/t/p/w300${poster_path}`}
             />
           </Link>
         </li>
