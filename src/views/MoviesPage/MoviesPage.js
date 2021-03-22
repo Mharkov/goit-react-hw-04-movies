@@ -1,69 +1,58 @@
 import React, { Component } from 'react';
-import * as api from '../service/movies-api';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Searchbar from '../components/Searchbar/Searchbar';
-import MoviesList from '../components/MoviesList/MoviesList';
-import Loader from '../components/Loader/Loader';
+import * as API from '../../services/movie-api';
+import Searchbar from '../../components/Searchbar/Searchbar';
+import routes from '../../routes';
+import { Link } from 'react-router-dom';
 
-export default class SearchMovie extends Component {
+export default class MoviesPage extends Component {
   state = {
+    query: '',
     movies: [],
-    page: 1,
-    isLoading: false,
   };
 
   componentDidMount() {
-    const query = new URLSearchParams(this.props.location.search).get('query');
-    if (query) {
-      this.fetchMovies(query);
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const prevQuery = new URLSearchParams(prevProps.location.search).get(
-      'query'
-    );
-    const nextQuery = new URLSearchParams(this.props.location.search).get(
-      'query'
-    );
-
-    if (prevQuery === nextQuery) {
+    const { location } = this.props;
+    const getMovies = new URLSearchParams(location.search).get('query');
+    if (!getMovies) {
       return;
     }
-
-    this.fetchMovies(nextQuery);
+    this.onSubmit(getMovies);
   }
-  fetchMovies = (query) => {
-    this.setState({ isLoading: true });
-    api
-      .searchMovies(query)
-      .then(({ results }) => {
-        this.setState({
-          movies: results,
-        });
-      })
-      .catch((error) => toast.error('Побробуйте снова'))
-      .finally(() => this.setState({ isLoading: false }));
-  };
 
-  setSearchQuery = (searchQuery) => {
-    this.props.history.push({
-      ...this.props.location,
-      search: `query=${searchQuery}`,
+  componentDidUpdate(prevProps) {
+    const prevQuery = new URLSearchParams(prevProps).get('query');
+    const nextQuery = new URLSearchParams(this.props).get('query');
+
+    if (prevQuery !== nextQuery) {
+      this.onSubmit(nextQuery);
+    }
+  }
+
+  onSubmit = (query) => {
+    const { history } = this.props;
+    this.setState({ query });
+    API.searchMovies(query).then(({ results }) => {
+      this.setState({ movies: results });
     });
-    this.setState({ movies: [], loading: true });
+    history.push({
+      pathname: history.pathname,
+      search: `query=${query}`,
+    });
   };
 
   render() {
-    const { movies, isLoading } = this.state;
+    const { movies } = this.state;
 
     return (
       <>
-        <Searchbar onSearch={this.setSearchQuery} />
-        {isLoading && <Loader />}
-        {movies.length > 0 && <MoviesList movies={movies} />}
-        <ToastContainer autoClose={3000} />
+        <Searchbar onSearch={this.onSubmit} />
+        <ul>
+          {movies.map((el) => (
+            <li key={el.id}>
+              <Link to={`${routes.MOVIES}/${el.id}`}>{el.title}</Link>
+            </li>
+          ))}
+        </ul>
       </>
     );
   }

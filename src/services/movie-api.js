@@ -9,6 +9,14 @@ axios.defaults.params = {
   language: 'en-US',
 };
 
+export const searchMovies = async (query) => {
+  const { data } = await axios.get(`/search/movie`, {
+    params: { query },
+  });
+
+  return data;
+};
+
 export const getTrending = async () => {
   const { data } = await axios.get('/trending/movie/day');
   return data;

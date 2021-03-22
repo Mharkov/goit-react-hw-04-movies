@@ -8,7 +8,7 @@ import styles from './MovieDetailsPage.module.css';
 
 class MovieDetailsPage extends Component {
   state = {
-    movie: [],
+    movie: { genres: [] },
   };
 
   async componentDidMount() {
@@ -48,10 +48,12 @@ class MovieDetailsPage extends Component {
             <h3>Overview</h3>
             <p>{movie.overview}</p>
             <h3>Genres</h3>
-            <ul className={styles.genreList}>
-              {/* {movie.genres.map((el) => (
-                <li key={el.id}>{movie.genres}</li>
-              ))} */}
+            <ul className={(styles.text, styles.genreList)}>
+              {movie.genres.map(({ id, name }) => (
+                <li className={styles.genre} key={id}>
+                  {name}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
