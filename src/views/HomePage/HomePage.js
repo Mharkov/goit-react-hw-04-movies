@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import * as API from '../../services/movie-api';
 import styles from './HomePage.module.css';
+import routes from '../../routes';
 
 class HomePage extends Component {
   state = {
@@ -23,7 +24,7 @@ class HomePage extends Component {
             <li key={id}>
               <Link
                 to={{
-                  pathname: `/movies/${id}`,
+                  pathname: `${routes.MOVIES}/${id}`,
                   state: {
                     from: location,
                   },

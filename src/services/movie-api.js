@@ -10,29 +10,49 @@ axios.defaults.params = {
 };
 
 export const searchMovies = async (query) => {
-  const { data } = await axios.get(`/search/movie`, {
-    params: { query },
-  });
+  try {
+    const { data } = await axios.get(`/search/movie`, {
+      params: { query },
+    });
 
-  return data;
+    return data;
+  } catch (error) {
+    console.log('erroe', { error });
+  }
 };
 
 export const getTrending = async () => {
-  const { data } = await axios.get('/trending/movie/day');
-  return data;
+  try {
+    const { data } = await axios.get('/trending/movie/day');
+    return data;
+  } catch (error) {
+    console.log('erroe', { error });
+  }
 };
 
 export const getMovieDetales = async (movie_id) => {
-  const { data } = await axios.get(`/movie/${movie_id}`);
-  return data;
+  try {
+    const { data } = await axios.get(`/movie/${movie_id}`);
+    return data;
+  } catch (error) {
+    console.log('erroe', { error });
+  }
 };
 
 export const getMoviesCast = async (movie_id) => {
-  const { data } = await axios.get(`/movie/${movie_id}/credits`);
-  return data;
+  try {
+    const { data } = await axios.get(`/movie/${movie_id}/credits`);
+    return data;
+  } catch (error) {
+    console.log('erroe', { error });
+  }
 };
 
 export const getMoviesReviews = async (movie_id) => {
-  const { data } = await axios.get(`/movie/${movie_id}/reviews`);
-  return data;
+  try {
+    const { data } = await axios.get(`/movie/${movie_id}/reviews`);
+    return data;
+  } catch (error) {
+    console.log('erroe', { error });
+  }
 };
